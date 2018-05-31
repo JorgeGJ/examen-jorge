@@ -1,0 +1,130 @@
+let init = function () {
+    $(".example:first h3").prop("id", "Granados");
+
+    $("#Granados").on("click", efectoInicial).click();
+
+    $("h1").text("Examen jQuery. Marzo de 2016. Jorge Granados Jurado");
+
+    $("#customInput").val("Jorge Granados Jurado");
+
+    $("#toggleCustom").on("click", ajax);
+
+    $("input[value='sube/baja']").on("click", efectoH3Derecha);
+
+    $("input[value='desaparece/aparece']").on("click", animaLista);
+
+    $("input[value='efectos']").on("click", animaSubLista);
+
+    $("input[value='ancho/alto']").on("click", parrafito);
+
+    $("input[value='verde']").on("click", seleccionadosVerde);
+
+    $("input[value='anima']").on("click", highlight);
+
+    //Llamamos al plugin
+    $(".domtree h3").plugin();
+
+    $("#miId").plugin();
+}
+
+
+let efectoInicial = function () {
+    $(this).fadeOut(1500).fadeIn(1500).delay(500);
+}
+
+let efectoH3Derecha = function () {
+    $(".domtree h3").slideUp(600).slideDown(600);
+}
+
+
+let animaLista = function () {
+    $(".domtree ul:first").fadeOut(800).fadeIn(800);
+}
+
+let animaSubLista = function () {
+    $(".domtree ul:first ul").slideUp(400).slideDown(400);
+}
+
+let parrafito = function () {
+    $('p:first').animate({width: 'toggle'}, 1500).
+                 animate({height: 'toggle'}, 'slow');
+}
+
+let seleccionadosVerde = function () {
+    $("select[size='5'] option:selected").css("background", "green");
+}
+
+let ajax = function () {
+    $.getJSON("texto.json", function (resultado) {
+        $.each(resultado, function (i, field) {
+            $("#customInput").val(field);
+        });
+    });
+}
+
+//Plugin
+jQuery.fn.plugin = function(options){
+
+    let defaults = $.extend({
+        color: "yellow",
+        height: "40%",
+        tamanio: "500%"
+    }, options); 
+
+    let miId = $.extend({
+        color: "red",
+        height: "40%",
+        tamanio: "600%"
+    }, options);    
+
+    let heightActual, tamannoActual;
+    if ($(this).prop("id") !== "miId") {
+        this.each(function(){
+            heightActual = $(this).css("height");
+            tamannoActual = $(this).css("fontSize");
+            
+            $(this).css({
+                backgroundColor: defaults.color,
+            });
+            $(this).on("click", function(){
+                $(this).css({
+                    height: defaults.height,
+                    fontSize: defaults.tamanio
+                });
+            }).on("dblclick", function(){
+                $(this).css({
+                    height: heightActual,
+                    fontSize: tamannoActual
+                });
+            })
+        });
+    } else {
+        this.each(function(){
+            heightActual = $(this).css("height");
+            tamannoActual = $(this).css("fontSize");
+            
+            $(this).css({
+                backgroundColor: miId.color,
+            });
+            $(this).on("click", function(){
+                $(this).css({
+                    height: miId.height,
+                    fontSize: miId.tamanio
+                });
+            }).on("dblclick", function(){
+                $(this).css({
+                    height: heightActual,
+                    fontSize: tamannoActual
+                });
+            })
+        });
+    }
+    return this;
+}
+let highlight = function () {
+    $("code").addClass("highlight").animate({ marginLeft: 15});  
+}
+$(init);
+
+
+
